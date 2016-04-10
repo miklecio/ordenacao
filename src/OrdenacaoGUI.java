@@ -416,7 +416,7 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
         while (h < n) {
             h = h * 3 + 1;
         }
-        h = h / 3;
+        h = (h-1) / 3;
         int c, j;
         while (h > 0) {
             for (int i = h; i < n; i++) {
@@ -428,7 +428,7 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
                 }
                 valores[j] = c;
             }
-            h = h / 2;
+            h = (h-1) / 3;
         }
     }
     
