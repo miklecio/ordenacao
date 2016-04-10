@@ -327,7 +327,7 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
                 combSort(array);
                 break;
             case 1:
-                shellSort(array);
+                shellSort.shellSort(array);
                 break;
             case 2:
                 heapSort(array);
@@ -409,28 +409,7 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
         }
     }
     
-    private static void shellSort(int[] valores) {
-        int h = 1;
-        int n = valores.length;
-        
-        while (h < n) {
-            h = h * 3 + 1;
-        }
-        h = (h-1) / 3;
-        int c, j;
-        while (h > 0) {
-            for (int i = h; i < n; i++) {
-                c = valores[i];
-                j = i;
-                while (j >= h && valores[j - h] > c) {
-                    valores[j] = valores[j - h];
-                    j = j - h;
-                }
-                valores[j] = c;
-            }
-            h = (h-1) / 3;
-        }
-    }
+    
     
     private static void heapSort(int[] valores) {
         buildMaxHeap(valores);
