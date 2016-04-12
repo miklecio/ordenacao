@@ -324,20 +324,20 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
                 gnomeSort(novo);
                 break;*/
             case 0:
-                combSort(array);
+                combSort.combSort(array);
                 break;
             case 1:
                 shellSort.shellSort(array);
                 break;
             case 2:
-                heapSort(array);
+                heapSort.heapSort(array);
                 break;
             case 3:
                 int k = (int)Math.log10(array.length);
-                radixSort(array, k);
+                radixSort.radixSort(array, k);
                 break;
             case 4:
-                countingSort(array, array.length);
+                countingSort.countingSort(array);
                 break;
         }
     }
@@ -369,7 +369,7 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
         }
     }
     
-    private static void swap(int[] v, int j, int aposJ) {
+    /*private static void swap(int[] v, int j, int aposJ) {
         int aux = v[j];
         v[j] = v[aposJ];
         v[aposJ] = aux;
@@ -387,101 +387,19 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
             pivot++;
         }
     }
-    
-    private static void combSort(int[] valores) {
-        int gap = valores.length;
-        boolean swapped = true;
-        
-        while (gap > 1 || swapped) {
-            if (gap > 1) {
-                gap = (int) (gap / 1.247330950103979);
-            }
-
-            int i = 0;
-            swapped = false;
-            while (i + gap < valores.length) {
-                if (valores[i] > valores[i + gap]) {
-                    swap(valores, i, i + gap);
-                    swapped = true;
-                }
-                i++;
-            }
-        }
-    }
+    */
     
     
     
-    private static void heapSort(int[] valores) {
-        buildMaxHeap(valores);
-        int n = valores.length;
-
-        for (int i = valores.length - 1; i > 0; i--) {
-            swap(valores, i, 0);
-            maxHeapify(valores, 0, --n);
-        }
-    }
-
-    private static void buildMaxHeap(int v[]) {
-        for (int i = v.length / 2 - 1; i >= 0; i--) {
-            maxHeapify(v, i, v.length);
-        }
-    }
-
-    private static void maxHeapify(int[] v, int pos, int n) {
-        int max = 2 * pos + 1, right = max + 1;
-        if (max < n) {
-            if (right < n && v[max] < v[right]) {
-                max = right;
-            }
-            if (v[max] > v[pos]) {
-                swap(v, max, pos);
-                maxHeapify(v, max, n);
-            }
-        }
-    }
     
-    private static void radixSort(int[] valores, int k) {
-        for (int digit = 0; digit < k; digit++) {
-            int power = (int) Math.pow(10, digit + 1);
-
-            int z[][] = new int[valores.length][10];
-            int n[] = new int[10];
-
-            for (int i = 0; i < valores.length; i++) {
-                int num = valores[i];
-                z[n[(num % power) / (power / 10)]][(num % power) / (power / 10)] = num;
-                n[(num % power) / (power / 10)]++;
-
-            }
-            int c = 0;
-            for (int i = 0; i < 10; i++) {
-
-                for (int j = 0; j < valores.length; j++) {
-                    if (j < n[i]) {
-                        valores[c] = z[j][i];
-                        c++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-        }
-    }
     
-    private static void countingSort(int[] valores, int k) {
-        int c[] = new int[k];
-        int[] a = Arrays.copyOf(valores, valores.length);
-        for (int i = 0; i < a.length; i++) {
-            c[a[i]]++;
-        }
-        for (int i = 1; i < k; i++) {
-            c[i] += c[i - 1];
-        }
-        for (int i = a.length - 1; i >= 0; i--) {
-            valores[--c[a[i]]] = a[i];
-        }
-    }
+
+    
+
+    
+    
+    
+    
 
     
     /**
