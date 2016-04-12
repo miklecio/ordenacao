@@ -1,5 +1,4 @@
 
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Random;
 import org.jfree.chart.ChartFactory;
@@ -23,18 +22,15 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class OrdenacaoGUI extends javax.swing.JFrame {
     
     private int[] valoresIniciais;
-    private long memoryBefore;
 
     /**
      * Creates new form OrdenacaoGUI
      */
     public OrdenacaoGUI() {
+        // inicializa os componentes da interface GUI
         initComponents();
-        valoresIniciais = new int[1000];
-        fillRandom(valoresIniciais);
-        jLabelValoresIniciais.setText(arrayToString(valoresIniciais));
-        Runtime rt = Runtime.getRuntime();
-        memoryBefore = rt.totalMemory() - rt.freeMemory();
+        // gera os valores nao-ordenados iniciais
+        gerarValoresIniciais();
     }
 
     /**
@@ -59,6 +55,8 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
         jButtonComparar = new javax.swing.JButton();
         jPanelGrafico = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBoxTamanho = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Outras Ordenações");
@@ -112,51 +110,58 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
         );
         jPanelGraficoLayout.setVerticalGroup(
             jPanelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 319, Short.MAX_VALUE)
+            .addGap(0, 382, Short.MAX_VALUE)
         );
+
+        jLabel5.setText("Tamanho da entrada:");
+
+        jComboBoxTamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "20", "100", "1000" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelValoresFinais)
                             .addComponent(jLabelValoresIniciais)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonGerar))
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabelTempo)
+                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
                                 .addComponent(jComboBoxMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(76, 76, 76)
+                                .addGap(37, 37, 37)
                                 .addComponent(jButtonOrdenar)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButtonComparar)))
-                        .addGap(0, 234, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1)))
+                                .addComponent(jButtonComparar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBoxTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(jButtonGerar)))
+                        .addGap(0, 273, Short.MAX_VALUE))
+                    .addComponent(jSeparator1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBoxTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonGerar))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelValoresIniciais)
                 .addGap(27, 27, 27)
@@ -184,119 +189,153 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrdenarActionPerformed
+        executarOrdenacao();
+    }//GEN-LAST:event_jButtonOrdenarActionPerformed
+
+    private void jButtonGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerarActionPerformed
+        gerarValoresIniciais();
+    }//GEN-LAST:event_jButtonGerarActionPerformed
+
+    private void jButtonCompararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompararActionPerformed
+        // exibe o grafico comparativo dos metodos de ordenacao
+        printGraph();
+    }//GEN-LAST:event_jButtonCompararActionPerformed
+
+    
+    // metodo que executa um algoritmo de acordo com o tipo de ordenacao recebido
+    private static void runSort(int[] array, int tipo) {
+        switch (tipo) {
+            case 0: // comb sort
+                combSort.combSort(array);
+                break;
+            case 1: // shell sort
+                shellSort.shellSort(array);
+                break;
+            case 2: // heapsort
+                heapSort.heapSort(array);
+                break;
+            case 3: // radix sort
+                int k = (int)Math.ceil(Math.log10(array.length));
+                radixSort.radixSort(array, k);
+                break;
+            case 4: // counting sort
+                countingSort.countingSort(array);
+                break;
+        }
+    }
+    
+    // metodo que converte um vetor em um string com os elementos separados por virgula
+    private static String arrayToString(int[] array) {
+        String string = "";
+        
+        // para vetores com mais que 23 elementos, retorna apenas os 11 primeiros e os 11 ultimos, com reticencias no meio
+        if (array.length > 23) {
+            int[] inicio = Arrays.copyOf(array, 11);
+            int[] fim = Arrays.copyOfRange(array, array.length-11, array.length);
+            string += arrayToString(inicio);
+            string += ", ..., ";
+            string += arrayToString(fim);
+        }
+        else {
+            // para vetores menores, exibe tudo
+            for (int i = 0; i < array.length; ++i) {
+                string += array[i];
+                if (i != array.length - 1) {
+                    string += ", ";
+                }
+            }
+        }
+        
+        return string;
+    }
+    
+    // metodo que preenche os elementos de um vetor com valores aleatorios
+    private static void fillRandom(int[] valores) {
+        Random rand = new Random();
+        for (int i = 0; i < valores.length; i++) {
+            valores[i] = rand.nextInt(valores.length);
+        }
+    }
+    
+    private void executarOrdenacao() {
+        // atualiza a label dos valores iniciais
         jLabelValoresIniciais.setText(arrayToString(valoresIniciais));
+        
+        // cria uma copia dos valores nao-ordenados para ser alterada e manter o vetor original intacto
         int[] novo = Arrays.copyOf(valoresIniciais, valoresIniciais.length);
+        
+        // executa o algoritmo de ordenacao selecionado e mede o tempo
         long tempo;
         tempo = System.nanoTime();
         runSort(novo, jComboBoxMetodo.getSelectedIndex());
         tempo = System.nanoTime() - tempo;
+        
+        // atualiza as labels de valores finais e de tempo
         jLabelValoresFinais.setText(arrayToString(novo));
         jLabelTempo.setText(String.valueOf(tempo) + " ns");
-    }//GEN-LAST:event_jButtonOrdenarActionPerformed
-
-    private void jButtonGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerarActionPerformed
+    }
+    
+    private void gerarValoresIniciais() {
+        // substitui os valores iniciais nao-ordenados por novos valores aleatorios com o tamanho selecionado
+        int tamanho = Integer.valueOf(jComboBoxTamanho.getSelectedItem().toString());
+        valoresIniciais = new int[tamanho];
         fillRandom(valoresIniciais);
+        
+        // atualiza a label de valores iniciais
         jLabelValoresIniciais.setText(arrayToString(valoresIniciais));
-    }//GEN-LAST:event_jButtonGerarActionPerformed
-
-    private void jButtonCompararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompararActionPerformed
-        long tempo, memoria;
+    }
+    
+    // metodo que exibe um grafico comparativo dos metodos de ordenacao
+    private void printGraph() {
+        long tempo;
+        
         try {
+            
+            // conjunto de dados do grafico
             XYSeriesCollection dataset = new XYSeriesCollection();
+            
+            // series de dados a serem exibidas no grafico
             int seriesSize = 5;
-            String[] legendas = {"Comb", "Shell", "Heap", "Radix", "Counting"};
             XYSeries[] series = new XYSeries[seriesSize];
+            
+            // adiciona as legendas de cada serie
+            String[] legendas = {"Comb", "Shell", "Heap", "Radix", "Counting"};
             for (int i = 0; i < seriesSize; ++i) {
                 series[i] = new XYSeries(legendas[i]);
             }
-            /*XYSeries combSeries = new XYSeries("Comb");
-            XYSeries shellSeries = new XYSeries("Shell");
-            XYSeries heapSeries = new XYSeries("Heap");
-            XYSeries radixSeries = new XYSeries("Radix");
-            XYSeries countingSeries = new XYSeries("Counting");*/
-            PrintWriter tempoWriter = new PrintWriter("tempo_tmp.csv", "utf-8");
-            PrintWriter memoriaWriter = new PrintWriter("memoria_tmp.csv", "utf-8");
-            tempoWriter.println(";Comb;Shell;Heap;Radix;Counting");
-            memoriaWriter.println(";Comb;Shell;Heap;Radix;Counting");
-            Runtime rt = Runtime.getRuntime();
+            
+            // executa 180 pontos no eixo de tamanho
             for (int i = 0; i < 180; ++i) {
+                
+                // o tamanho é incrementado de 1000 em 1000
                 int size = (i + 1)*1000;
+                
+                // gera um vetor de valores aleatorios com o tamanho determinado
                 int [] valores = new int[size];
                 fillRandom(valores);
-                tempoWriter.print(size + ";");
-                memoriaWriter.print(size + ";");
-                int[] novo;
                 
+                int[] novo;
+                // executa para cada serie
                 for (int j = 0; j < seriesSize; ++j) {
+                    // cria uma copia dos valores gerados, para manter o vetor original intacto e igual para todos os algoritmos
                     novo = Arrays.copyOf(valores, valores.length);
+                    
+                    // executa o algoritmo daquela serie e mede o tempo
                     tempo = System.nanoTime();
                     runSort(novo, j);
                     tempo = System.nanoTime() - tempo;
-                    if (j < seriesSize - 1)
-                        tempoWriter.print(tempo + ";");
-                    else
-                        tempoWriter.println(tempo);
+                    
+                    // adiciona o ponto (tamanho, tempo) na respectiva serie
                     series[j].add(size, tempo);
-                    memoria = rt.totalMemory() - rt.freeMemory();
-                    if (j < seriesSize - 1)
-                        memoriaWriter.print((memoria - memoryBefore) + ";");
-                    else
-                        memoriaWriter.println((memoria - memoryBefore));
-                    memoryBefore = memoria;
                 }
-
-                /*novo = Arrays.copyOf(valores, valores.length);
-                tempo = System.nanoTime();
-                shellSort(novo);
-                tempo = System.nanoTime() - tempo;
-                tempoWriter.print(tempo + ";");
-                shellSeries.add(size, tempo);
-                memoria = rt.totalMemory() - rt.freeMemory();
-                memoriaWriter.print((memoria - memoryBefore) + ";");
-                memoryBefore = memoria;
-
-                novo = Arrays.copyOf(valores, valores.length);
-                tempo = System.nanoTime();
-                heapSort(novo);
-                tempo = System.nanoTime() - tempo;
-                tempoWriter.print(tempo + ";");
-                heapSeries.add(size, tempo);
-                memoria = rt.totalMemory() - rt.freeMemory();
-                memoriaWriter.print((memoria - memoryBefore) + ";");
-                memoryBefore = memoria;
-
-                novo = Arrays.copyOf(valores, valores.length);
-                int k = (int)Math.log10(size);
-                tempo = System.nanoTime();
-                radixSort(novo, k);
-                tempo = System.nanoTime() - tempo;
-                tempoWriter.print(tempo + ";");
-                radixSeries.add(size, tempo);
-                memoria = rt.totalMemory() - rt.freeMemory();
-                memoriaWriter.print((memoria - memoryBefore) + ";");
-                memoryBefore = memoria;
-
-                novo = Arrays.copyOf(valores, valores.length);
-                tempo = System.nanoTime();
-                countingSort(novo, size);
-                tempo = System.nanoTime() - tempo;
-                tempoWriter.println(tempo);
-                countingSeries.add(size, tempo);
-                memoria = rt.totalMemory() - rt.freeMemory();
-                memoriaWriter.println((memoria - memoryBefore));
-                memoryBefore = memoria;*/
             }
-            tempoWriter.close();
-            memoriaWriter.close();
+            
+            // adiciona todas as series ao conjunto de dados do grafico
             for (int i = 0; i < seriesSize; ++i) {
                 dataset.addSeries(series[i]);
             }
-            /*dataset.addSeries(combSeries);
-            dataset.addSeries(shellSeries);
-            dataset.addSeries(heapSeries);
-            dataset.addSeries(radixSeries);
-            dataset.addSeries(countingSeries);*/
             
+            // cria o grafico com parametros personalizados
             String titulo = "Comparativo das Ordenações";
             String eixoy = "Tempo (ns)";
             String eixox = "Tamanho";
@@ -315,92 +354,8 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
         catch(Exception e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_jButtonCompararActionPerformed
-
-    
-    private static void runSort(int[] array, int tipo) {
-        switch (tipo) {
-            /*case 0:
-                gnomeSort(novo);
-                break;*/
-            case 0:
-                combSort.combSort(array);
-                break;
-            case 1:
-                shellSort.shellSort(array);
-                break;
-            case 2:
-                heapSort.heapSort(array);
-                break;
-            case 3:
-                int k = (int)Math.log10(array.length);
-                radixSort.radixSort(array, k);
-                break;
-            case 4:
-                countingSort.countingSort(array);
-                break;
-        }
+        
     }
-    
-    private static String arrayToString(int[] array) {
-        String string = "";
-        if (array.length > 23) {
-            int[] inicio = Arrays.copyOf(array, 11);
-            int[] fim = Arrays.copyOfRange(array, array.length-11, array.length);
-            string += arrayToString(inicio);
-            string += ", ..., ";
-            string += arrayToString(fim);
-        }
-        else {
-            for (int i = 0; i < array.length; ++i) {
-                string += array[i];
-                if (i != array.length - 1) {
-                    string += ", ";
-                }
-            }
-        }
-        return string;
-    }
-    
-    private void fillRandom(int[] valores) {
-        Random rand = new Random();
-        for (int i = 0; i < valores.length; i++) {
-            valores[i] = rand.nextInt(valores.length);
-        }
-    }
-    
-    /*private static void swap(int[] v, int j, int aposJ) {
-        int aux = v[j];
-        v[j] = v[aposJ];
-        v[aposJ] = aux;
-    }
-    
-    private static void gnomeSort(int[] valores) {
-        int pivot = 0;
-        while (pivot < (valores.length - 1)) {
-            if (valores[pivot] > valores[pivot + 1]) {
-                swap(valores, pivot, pivot + 1);
-                if (pivot > 0) {
-                    pivot -= 2;
-                }
-            }
-            pivot++;
-        }
-    }
-    */
-    
-    
-    
-    
-    
-
-    
-
-    
-    
-    
-    
-
     
     /**
      * @param args the command line arguments
@@ -442,10 +397,12 @@ public class OrdenacaoGUI extends javax.swing.JFrame {
     private javax.swing.JButton jButtonGerar;
     private javax.swing.JButton jButtonOrdenar;
     private javax.swing.JComboBox<String> jComboBoxMetodo;
+    private javax.swing.JComboBox<String> jComboBoxTamanho;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelTempo;
     private javax.swing.JLabel jLabelValoresFinais;
     private javax.swing.JLabel jLabelValoresIniciais;
